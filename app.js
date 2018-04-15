@@ -7,5 +7,8 @@ request({
 }, (error, response, body) => {
   //args define a nicer output for the object, the 2 is used to specify
   //spaces in the object output to make it easier to read
-  console.log(JSON.stringify(body, undefined, 2));
+  console.log(`Address: ${body.results[0].formatted_address}`);
+  console.log(`Latitide: ${body.results[0].geometry.location.lat}`);
+  console.log(`Longitude: ${body.results[0].geometry.location.lng}`);
+
 });
