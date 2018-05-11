@@ -1,5 +1,5 @@
-const request = require ("request");
 const yargs = require("yargs");
+const geocode = require("./GeoCode/geocode.js")
 
 const argv = yargs
   .options({
@@ -16,21 +16,13 @@ const argv = yargs
   .alias("help", "h")
   .argv;
 
-//var gets user address entered by the user frkm the terminal when the prog is argument
-//such as-  node app.js -a "flat 11 bute court 30 dirleton drive glasgow"
-var encodedAddress = encodeURIComponent(argv.address);
-
-console.log(argv);
-
-request({
-  url: `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}`,
-  //convert string data into json object
-  json: true
-}, (error, response, body) => {
-  //args define a nicer output for the object, the 2 is used to specify
-  //spaces in the object output to make it easier to read
-  console.log(`Address: ${body.results[0].formatted_address}`);
-  console.log(`Latitide: ${body.results[0].geometry.location.lat}`);
-  console.log(`Longitude: ${body.results[0].geometry.location.lng}`);
-
+//pass in the address entered in the CLI to the function
+//then have the callback function (errorMsg, results) => to
+//deal with error msg or the result which will be the Lat and Long values
+geocode.geocodeAddress(argv.address, (errorMsg, results) => {
+  if(errorMsg){
+    console.log(errorMsg);
+  }else if(results){
+    console.log(JSON.stringify(results, undefined, 2));
+  }
 });
